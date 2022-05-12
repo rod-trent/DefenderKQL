@@ -1,0 +1,12 @@
+//Getting the count of Windows Servers
+
+let serverbuilds = dynamic(["20349" , "20348" , "19042" , "18363" , "17763" , "14393"]);
+DeviceTvmSecureConfigurationAssessment
+| where isnotempty(DeviceName)
+| join kind=leftouter (
+    DeviceInfo    
+) on DeviceName
+| where isnotempty(OSBuild)
+| where OSBuild in (serverbuilds)
+| distinct DeviceName, OSPlatform, OSBuild
+| summarize count() by DeviceName, OSPlatform, OSBuild
